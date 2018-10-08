@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8 />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js.js"></script>
+    <title>projekt2 testgrounds</title>
+</head>
+<body>
+<div id="">
+    <p>projekt 2 comes here</p>
+    <input type="date" id="start-date">
+    <input type="date" id="end-date"><br>
+    <button onclick="drawCharts('btc','usd')">Get Crypto Currency Data</button>
+    <script>
+        $.get("https://api.cryptonator.com/api/ticker/btc-usd", function(data, status)
+        {
+            //console.log(data);
+            //console.log(status);
+        });
+    </script>
+</div>
+</body>
+</html>
