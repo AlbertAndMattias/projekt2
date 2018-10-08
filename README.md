@@ -1,2 +1,2 @@
 # projekt2
-visualisering av informations kurs arcada 18-19
+Visualisering av Information - Arcada 18-19
