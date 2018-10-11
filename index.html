@@ -1,25 +1,56 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset=utf-8 />
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="js.js"></script>
-    <title>projekt2 testgrounds</title>
-</head>
-<body>
-<div id="">
-    <p>projekt 2 comes here</p>
-    <input type="date" id="start-date">
-    <input type="date" id="end-date"><br>
-    <button onclick="drawCharts('btc','usd')">Get Crypto Currency Data</button>
-    <script>
-        $.get("https://api.cryptonator.com/api/ticker/btc-usd", function(data, status)
-        {
-            //console.log(data);
-            //console.log(status);
-        });
-    </script>
-</div>
-</body>
+    <head>
+        <meta charset=utf-8 />
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="fetcher.js"></script>
+        <script defer src="chart.js"></script>
+        <link rel="stylesheet" href="style.css" />
+        <link href="https://fonts.googleapis.com/css?family=Dosis:400,600,800" rel="stylesheet">
+        <title>Projekt 2 - Testing grounds</title>
+    </head>
+    <body>
+        <div id="page-wrapper">
+            <div id="form-container">
+                <div class="form-element">
+                    <label for="crypto-field">Cryptocurrency:</label>
+                    <select name="crypto-field" id="crypto-field">
+                        <option value="BTC">BTC (Bitcoin)</option>
+                        <option value="ETH">ETH (Ethereum)</option>
+                        <option value="LTC">LTC (LiteCoin)</option>
+                    </select>
+                </div>
+                <div class="form-element">
+                    <label for="currency-field">Fiat money:</label>
+                    <select name="currency-field" id="currency-field">
+                        <option value="AUD">AUD (Australian dollar)</option>
+                        <option value="BRL">BRL (Brazilian real)</option>
+                        <option value="CAD">CAD (Canadian dollar)</option>
+                        <option value="CHF">CHF (Swiss franc)</option>
+                        <option value="CNY">CNY (Chinese yuan/renminbi)</option>
+                        <option value="EUR">EUR (Euro)</option>
+                        <option value="GBP">GBP (Pound sterling)</option>
+                        <option value="HKD">HKD (Hong Kong dollar)</option>
+                        <option value="INR">INR (India rupee)</option>
+                        <option value="JPY">JPY (Japanese yen)</option>
+                        <option value="MXN">MXN (Mexican peso)</option>
+                        <option value="NOK">NOK (Norwegian krone)</option>
+                        <option value="NZD">NZD (New Zealand dollar)</option>
+                        <option value="RUB">RUB (Russia ruble)</option>
+                        <option value="TRY">TRY (Turkish lira)</option>
+                        <option value="USD">USD (United States dollars)</option>
+                        <option value="ZAR">ZAR (South African rand)</option>
+                    </select>
+                </div>
+                <div class="form-element">
+                    <label for="days-field">In the last <input type="number" name="days-field" id="days-field" min="2" max="60" step="1" value="10"> days</label>
+                </div>
+                <div class="dummy">
+                    <input type="button" id="update-button" value="Update chart" />
+                </div>
+            </div>
+            <div id="chart-container"></div>   
+        </div>
+    </body>
 </html>
