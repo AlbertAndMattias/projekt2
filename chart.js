@@ -1,5 +1,5 @@
 
-let margin, aspect, fWidth, fHeight, width, height, chartContainer, chartCanvas, xScale, yScale, xAxis, yAxis, pathGen, chartPaths, chartDots, dotRadius, bandwidth;
+let margin, aspect, fWidth, fHeight, width, height, chartContainer, chartCanvas, xScale, yScale, xAxis, yAxis, pathGen, chartPaths, chartDots, dotRadius, bandwidth, rotate;
 
 // Configure and render chart.
 // Chart init function.
@@ -8,13 +8,14 @@ function initChart(data) {
   console.log(data);
 
   // Sizing variables.
-  margin = { top: 32, right: 32, bottom: 32, left: 48 },
+  margin = { top: 32, right: 32, bottom: 54, left: 48 },
     aspect = 2,
     fWidth = $("#chart-container").width(),
     fHeight = fWidth / aspect,
     width = fWidth - margin.right - margin.left,
     height = fHeight - margin.top - margin.bottom,
     dotRadius = 2.5;
+    rotate = -80;
 
   // Get chart container.
   chartContainer = d3.select("#chart-container");
@@ -76,7 +77,12 @@ function initChart(data) {
   xAxis = chartCanvas.append("g")
     .attr("id", "x-axis")
     .attr("transform", `translate(0 ${ height })`)
-    .call(d3.axisBottom(xScale));
+    .call(d3.axisBottom(xScale))
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", ".15em")
+      .attr("transform", `rotate(${rotate})`);
 
   // Append y axis.
   yAxis = chartCanvas.append("g")
@@ -146,7 +152,12 @@ function updateChart(data) {
   // Append x axis.
   chartCanvas.select("#x-axis").transition()
     .delay(500)
-    .call(d3.axisBottom(xScale));
+    .call(d3.axisBottom(xScale))
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", ".15em")
+      .attr("transform", `rotate(${rotate})`);
 
   // Append y axis.
   chartCanvas.select("#y-axis").transition()
