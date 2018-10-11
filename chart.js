@@ -1,5 +1,5 @@
 
-let margin, aspect, fWidth, fHeight, width, height, chartContainer, chartCanvas, xScale, yScale, xAxis, yAxis, pathGen, chartPaths, chartDots, dotRadius, bandwidth, rotate;
+let margin, aspect, fWidth, fHeight, width, height, chartContainer, chartCanvas, xScale, yScale, xAxis, yAxis, pathGen, chartPaths, chartDots, dotRadius, bandwidth, xLabeldx, xLabeldy, xLabelRot;
 
 // Configure and render chart.
 // Chart init function.
@@ -8,14 +8,16 @@ function initChart(data) {
   console.log(data);
 
   // Sizing variables.
-  margin = { top: 32, right: 32, bottom: 54, left: 48 },
+  margin = { top: 32, right: 32, bottom: 64, left: 48 },
     aspect = 2,
     fWidth = $("#chart-container").width(),
     fHeight = fWidth / aspect,
     width = fWidth - margin.right - margin.left,
     height = fHeight - margin.top - margin.bottom,
-    dotRadius = 2.5;
-    rotate = -80;
+    dotRadius = 2.5,
+    xLabeldx = -10,
+    xLabeldy = -2,
+    xLabelRot = -80;
 
   // Get chart container.
   chartContainer = d3.select("#chart-container");
@@ -37,7 +39,7 @@ function initChart(data) {
 
   // Scale y axis.
   yScale = d3.scaleLinear()
-    .domain(d3.extent(data.map(d => { return d.mean; })))
+    .domain([d3.min(data.map(d => { return d.low; })), d3.max(data.map(d => { return d.high; }))])
     .range([height, 0])
     .nice();
 
@@ -50,15 +52,32 @@ function initChart(data) {
   chartPaths = chartCanvas.append("g")
     .attr("id", "chart-paths")
     .attr("transform", `translate(${ bandwidth / 2 } 0)`);
+    
+  // Candlesticks group.
+  chartCandles = chartCanvas.append("g")
+    .attr("id", "chart-candles")
+    .attr("transform", `translate(${ bandwidth / 2 } 0)`);
 
   // Dot group.
   chartDots = chartCanvas.append("g")
     .attr("id", "chart-dots")
     .attr("transform", `translate(${ bandwidth / 2 } 0)`);
 
+
   // Append path.
   chartPaths.append("path")
     .attr("d", pathGen(data));
+
+  // Append candlesticks.
+  chartCandles.selectAll(".chart-candle")
+    .data(data)
+    .enter()
+    .append("line")
+      .attr("x1", d => { return xScale(d.time); })
+      .attr("y1", d => { return yScale(d.high); })
+      .attr("x2", d => { return xScale(d.time); })
+      .attr("y2", d => { return yScale(d.low); })
+      .classed("chart-candle", true);
 
   // Append dots.
   chartDots.selectAll(".chart-dot")
@@ -66,13 +85,10 @@ function initChart(data) {
     .enter()
     .append("circle")
       .attr("cx", d => { return xScale(d.time); })
-      .attr("cy", d => { 
-        console.log(`Input: ${ d.mean }`)
-        console.log(`Output: ${ yScale(d.mean) }`);
-        return yScale(d.mean); })
+      .attr("cy", d => { return yScale(d.mean); })
       .attr("r", dotRadius)
-      .classed("chart-dot", true)
-      
+      .classed("chart-dot", true);
+
   // Append x axis.
   xAxis = chartCanvas.append("g")
     .attr("id", "x-axis")
@@ -80,9 +96,9 @@ function initChart(data) {
     .call(d3.axisBottom(xScale))
       .selectAll("text")
       .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", ".15em")
-      .attr("transform", `rotate(${rotate})`);
+      .attr("dx", xLabeldx)
+      .attr("dy", xLabeldy)
+      .attr("transform", `rotate(${ xLabelRot })`);
 
   // Append y axis.
   yAxis = chartCanvas.append("g")
@@ -106,62 +122,73 @@ function updateChart(data) {
 
   // Scale y axis.
   yScale = d3.scaleLinear()
-    .domain(d3.extent(data.map(d => { return d.mean; })))
+    .domain([d3.min(data.map(d => { return d.low; })), d3.max(data.map(d => { return d.high; }))])
     .range([height, 0])
     .nice();
     
   chartPaths.select("path").transition()
-    .delay(500)
     .attr("d", pathGen(data));
   
   chartCanvas.select("#chart-paths").transition()
-    .delay(500)
+    .attr("transform", `translate(${ bandwidth / 2} 0)`);
+
+  chartCanvas.select("#chart-candles").transition()
     .attr("transform", `translate(${ bandwidth / 2} 0)`);
 
   chartCanvas.select("#chart-dots").transition()
-    .delay(500)
     .attr("transform", `translate(${ bandwidth / 2} 0)`);
 
+  let updateCandles = chartCanvas.select("#chart-candles").selectAll(".chart-candle")
+    .data(data);
+
+  updateCandles.enter()
+    .append("line")
+      .attr("x1", d => { return xScale(d.time); })
+      .attr("y1", d => { return yScale(d.high); })
+      .attr("x2", d => { return xScale(d.time); })
+      .attr("y2", d => { return yScale(d.low); })
+      .classed("chart-candle", true);
+  
+  updateCandles.exit()
+    .remove();
+    
   let updateDots = chartCanvas.select("#chart-dots").selectAll(".chart-dot")
     .data(data);
     
   updateDots.enter()
     .append("circle")
-      .attr("cx", d => { return xScale(d.time); })
-      .attr("cy", d => { return yScale(d.mean); })
-      .attr("r", 0)
-      .classed("chart-dot", true);
-
+    .attr("cx", d => { return xScale(d.time); })
+    .attr("cy", d => { return yScale(d.mean); })
+    .attr("r", 0)
+    .classed("chart-dot", true);
+    
   updateDots.exit()
     .remove();
 
-  // chartCanvas.select("#chart-dots").selectAll(".chart-dot")
-  //   .data(data)
-  //   .exit()
-  //     .remove();
+  chartCanvas.select("#chart-candles").selectAll(".chart-candle").transition()
+    .attr("x1", d => { return xScale(d.time); })
+    .attr("y1", d => { return yScale(d.high); })
+    .attr("x2", d => { return xScale(d.time); })
+    .attr("y2", d => { return yScale(d.low); });
 
   chartCanvas.select("#chart-dots").selectAll(".chart-dot").transition()
-    .delay(500)
     .attr("cx", d => { return xScale(d.time); })
-    .attr("cy", d => { 
-      console.log(`Input: ${ d.mean }`)
-      console.log(`Output: ${ yScale(d.mean) }`);
-      return yScale(d.mean); })
+    .attr("cy", d => { return yScale(d.mean); })
     .attr("r", dotRadius);
   
   // Append x axis.
   chartCanvas.select("#x-axis").transition()
-    .delay(500)
+    
     .call(d3.axisBottom(xScale))
       .selectAll("text")
       .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", ".15em")
-      .attr("transform", `rotate(${rotate})`);
+      .attr("dx", xLabeldx)
+      .attr("dy", xLabeldy)
+      .attr("transform", `rotate(${ xLabelRot })`);
 
   // Append y axis.
   chartCanvas.select("#y-axis").transition()
-    .delay(500)
+    
     .call(d3.axisLeft(yScale));
 
   console.log("Chart updated.");

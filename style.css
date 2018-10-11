@@ -94,13 +94,18 @@ body {
 }
 
 #chart-container {
-  width: 80%;
+  width: 90%;
   display: flex;
 }
 
 .chart-dot {
   fill: #272727;
   stroke: #FF652F;
+}
+
+.chart-candle {
+  stroke: #14A76C;
+  stroke-width: 1px;
 }
 
 #x-axis, #y-axis {
