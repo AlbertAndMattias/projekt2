@@ -84,10 +84,27 @@ function initChart(data) {
     .data(data)
     .enter()
     .append("circle")
+      .classed("chart-dot", true)
       .attr("cx", d => { return xScale(d.time); })
       .attr("cy", d => { return yScale(d.mean); })
       .attr("r", dotRadius)
-      .classed("chart-dot", true);
+      .on('mouseover', function (data) {
+        tempColor = this.style.fill;
+        d3.select(this)
+            .transition()
+            .delay(200)
+            .duration(1000)
+            .style('opacity', .5)
+            .style('fill', tempColor)
+            .attr("r", 80);
+    })
+        .on('mouseout', function (data) {
+            d3.select(this)
+                .transition()
+                .style('opacity', 1)
+                .style('fill', tempColor)
+                .attr("r", dotRadius);
+        });
 
   // Append x axis.
   xAxis = chartCanvas.append("g")
@@ -107,6 +124,10 @@ function initChart(data) {
 
   console.log("Chart initialised.");
 }
+
+
+
+
 
 // Chart update function.
 function updateChart(data) {
@@ -164,6 +185,24 @@ function updateChart(data) {
     
   updateDots.exit()
     .remove();
+
+  updateDots.on('mouseover', function (data) {
+      tempColor = this.style.fill;
+      d3.select(this)
+          .transition()
+          .delay(200)
+          .duration(1000)
+          .style('opacity', .5)
+          .style('fill', tempColor)
+          .attr("r", 80);
+  })
+      .on('mouseout', function (data) {
+          d3.select(this)
+              .transition()
+              .style('opacity', 1)
+              .style('fill', tempColor)
+              .attr("r", dotRadius);
+      });
 
   chartCanvas.select("#chart-candles").selectAll(".chart-candle").transition()
     .attr("x1", d => { return xScale(d.time); })
