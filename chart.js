@@ -129,24 +129,24 @@ function updateChart(data) {
     
     bandwidth = xScale.bandwidth();
     
-    // Scale y axis.
-    yScale = d3.scaleLinear()
-    .domain([d3.min(data.map(d => { return d.low; })), d3.max(data.map(d => { return d.high; }))])
-    .range([height, 0])
-    .nice();
-    
-    // Append x axis.
-    chartCanvas.select("#x-axis").transition()
-      .call(d3.axisBottom(xScale))
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", xLabeldx)
-        .attr("dy", xLabeldy)
-        .attr("transform", `rotate(${ xLabelRot })`);
+  // Scale y axis.
+  yScale = d3.scaleLinear()
+  .domain([d3.min(data.map(d => { return d.low; })), d3.max(data.map(d => { return d.high; }))])
+  .range([height, 0])
+  .nice();
   
-    // Append y axis.
-    chartCanvas.select("#y-axis").transition()
-      .call(d3.axisLeft(yScale));
+  // Append x axis.
+  chartCanvas.select("#x-axis").transition()
+    .call(d3.axisBottom(xScale))
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", xLabeldx)
+      .attr("dy", xLabeldy)
+      .attr("transform", `rotate(${ xLabelRot })`);
+  
+  // Append y axis.
+  chartCanvas.select("#y-axis").transition()
+    .call(d3.axisLeft(yScale));
     
   chartPaths.select("path").transition()
     .attr("d", pathGen(data));
