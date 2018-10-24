@@ -1,17 +1,14 @@
 
-let currentData, margin, aspect, fWidth, fHeight, width, height, chartContainer, chartCanvas, xScale, yScale, xAxis, yAxis, pathGen, chartPaths, chartDots, dotRadius, bandwidth, xLabeldx, xLabeldy, xLabelRot;
+let margin, fWidth, fHeight, width, height, chartContainer, chartCanvas, xScale, yScale, xAxis, yAxis, pathGen, chartPaths, chartDots, dotRadius, bandwidth, xLabeldx, xLabeldy, xLabelRot;
 
 // Configure and render chart.
 // Chart init function.
 function initChart(data) {
 
-  console.log(data);
-
   // Sizing variables.
   margin = { top: 32, right: 32, bottom: 64, left: 48 },
-    aspect = 2,
     fWidth = $("#chart-container").width(),
-    fHeight = fWidth / aspect,
+    fHeight = $("#chart-container").height(),
     width = fWidth - margin.right - margin.left,
     height = fHeight - margin.top - margin.bottom,
     dotRadius = 2.5,
@@ -102,17 +99,7 @@ function initChart(data) {
       .classed("chart-dot", true)
       .attr("cx", d => { return xScale(d.time); })
       .attr("cy", d => { return yScale(d.mean); })
-      .attr("r", dotRadius)
-      .on('mouseover', function() {
-        this.parentNode.appendChild(this)
-        d3.select(this).transition()
-          .duration(500)
-          .attr("r", dotRadius * 20)
-      })
-      .on('mouseout', function() {
-        d3.select(this).transition()
-          .attr("r", dotRadius)
-      });
+      .attr("r", dotRadius);
 
   console.log("Chart initialised.");
 }
@@ -153,13 +140,13 @@ function updateChart(data) {
     .attr("d", pathGen(data));
   
   chartCanvas.select("#chart-paths").transition()
-    .attr("transform", `translate(${ bandwidth / 2} 0)`);
+    .attr("transform", `translate(${ bandwidth / 2 } 0)`);
 
   chartCanvas.select("#chart-candles").transition()
-    .attr("transform", `translate(${ bandwidth / 2} 0)`);
+    .attr("transform", `translate(${ bandwidth / 2 } 0)`);
 
   chartCanvas.select("#chart-dots").transition()
-    .attr("transform", `translate(${ bandwidth / 2} 0)`);
+    .attr("transform", `translate(${ bandwidth / 2 } 0)`);
 
   let updateCandles = chartCanvas.select("#chart-candles").selectAll(".chart-candle")
     .data(data);
@@ -183,17 +170,7 @@ function updateChart(data) {
       .classed("chart-dot", true)
       .attr("cx", d => { return xScale(d.time); })
       .attr("cy", d => { return yScale(d.mean); })
-      .attr("r", 0)
-      .on('mouseover', function() {
-        this.parentNode.appendChild(this)
-        d3.select(this).transition()
-          .duration(500)
-          .attr("r", dotRadius * 20)
-      })
-      .on('mouseout', function() {
-        d3.select(this).transition()
-          .attr("r", dotRadius)
-      });
+      .attr("r", 0);
     
   updateDots.exit()
     .remove();
@@ -214,7 +191,7 @@ function updateChart(data) {
 
 function resizeChart(data) {
   fWidth = $("#chart-container").width(),
-  fHeight = fWidth / aspect,
+  fHeight = $("#chart-container").height(),
   width = fWidth - margin.right - margin.left,
   height = fHeight - margin.top - margin.bottom;
 
@@ -312,24 +289,3 @@ function resizeChart(data) {
 
   console.log("Chart updated.");
 }
-
-// Load chart on document ready.
-$(document).ready(() => {
-  getData($("#crypto-field").val(), $("#currency-field").val(), $("#days-field").val()).then((dataObj) => { 
-    initChart(dataObj.data);
-    currentData = dataObj.data;
-  });
-});
-
-// Update chart on button click.
-$("#update-button").click(() => {
-  getData($("#crypto-field").val(), $("#currency-field").val(), $("#days-field").val()).then((dataObj) => { 
-    updateChart(dataObj.data);
-    currentData = dataObj.data;
-  });
-});
-
-// Update chart on button click.
-$(window).resize(() => {
-  resizeChart(currentData);
-});
