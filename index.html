@@ -4,11 +4,11 @@
         <meta charset=utf-8 />
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="fetcher.js"></script>
-        <script defer src="chart.js"></script>
-        <link rel="stylesheet" href="style.css" />
+        <script src="js/fetcher.js"></script>
+        <script defer src="js/chart.js"></script>
+        <link rel="stylesheet" href="css/style.css" />
         <link href="https://fonts.googleapis.com/css?family=Dosis:400,600,800" rel="stylesheet">
-        <title>Projekt 2 - Testing grounds</title>
+        <title>Projekt 2 - MultiCharts Dev</title>
     </head>
     <body>
         <div id="page-wrapper">
@@ -48,9 +48,15 @@
                 </div>
                 <div class="dummy">
                     <input type="button" id="update-button" value="Update chart" />
+                    <input id="radio-val" type="radio" name="path-select" value="val" checked>
+                    <label for="radio-val">Value</label>
+
+                    <input id="radio-vol" type="radio" name="path-select" value="vol">
+                    <label for="radio-vol">Volume</label>
                 </div>
             </div>
-            <div id="chart-container"></div>   
+            <div id="chart-container"></div>
+            <div id="chart-container2" hidden></div>
         </div>
     </body>
 </html>

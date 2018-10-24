@@ -1,0 +1,123 @@
+/* Colours:
+  #272727
+  #747474
+  #FF652F
+  #FFE400
+  #14A76C */
+
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  font-family: "Dosis";
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #272727;
+  color: #747474;
+}
+
+#page-heading {
+  margin: 8px;
+  color: #747474;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+#page-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#form-container {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: left;
+  font-weight: 700;
+}
+
+.form-element {
+  display: flex;
+  align-content: center;
+  justify-content: left;
+  padding: 2px;
+  color: #747474;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.form-element input, .form-element select {
+  outline: 0;
+  border: 0;
+  background-color: #272727;
+  color: #747474;
+  font-size: 16px;
+  text-align: center;
+}
+
+.form-element input:hover, .form-element select:hover {
+  color: #14A76C;
+  cursor: pointer;
+}
+
+.form-element input:focus, .form-element select:focus {
+  color: #14A76C;
+  cursor: pointer;
+}
+
+#update-button {
+  display: flex;
+  margin: 2px;
+  outline: 0;
+  background-color: #272727;
+  color: #747474;
+  padding-bottom: 4px;
+  border: 1px solid #747474;
+  border-radius: 2px;
+  font-size: 16px;
+}
+
+#update-button:hover {
+  color: #14A76C;
+  cursor: pointer;
+}
+
+#update-button:active {
+  border-color: #14A76C;
+}
+
+#chart-container {
+  width: 90%;
+  display: flex;
+}
+
+.chart-dot {
+  fill: #272727;
+  stroke: #FF652F;
+}
+
+.chart-candle {
+  stroke: #14A76C;
+  stroke-width: 2px;
+}
+
+#x-axis, #y-axis {
+  font-size: 12px;
+}
+
+#chart-paths {
+  fill: none;
+  stroke: #FF652F;
+  stroke-width: 2px;
+}
+
+.dummy {
+  display: flex;
+}
