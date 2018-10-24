@@ -21,7 +21,7 @@ function getData(crypto, currency, days) {
                 open: e.open,
                 mean: (e.high + e.low) / 2,
                 volumefrom: e.volumefrom,
-                volumento: e.volumeto
+                volumeto: e.volumeto
             });
         }
         return historicalData;
